@@ -1,91 +1,25 @@
-﻿// EditBox and EditBoxAdorner taken from this example WPF example:
-// https://github.com/Microsoft/WPF-Samples/tree/master/Sample%20Applications/ExpenseIt
+// // Copyright (c) Microsoft. All rights reserved.
+// // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
 
-namespace StardewCropCalculator
+// Type
+// DependencyProperty, RoutedEventArgs, DependencyObject, FrameworkElement
+// Control
+// Debug
+// AdornerLayer
+// MouseEventArgs, MouseEventButtonArgs, KeyEventArgs, KeyboardFocusChangedEventArgs
+
+// VisualTreeHelper
+
+namespace EditBoxControlLibrary
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        List<Crop> crops;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            crops = new List<Crop>();
-            crops.Add(new Crop("blueberry", 13, 4, 80, 240));
-            crops.Add(new Crop("hot pepper", 5, 3, 40, 40));
-            crops.Add(new Crop("melon", 12, 1000, 80, 250)); // only harvetable once
-            crops.Add(new Crop("hops", 11, 1, 60, 25));
-            crops.Add(new Crop("tomato", 11, 4, 50, 60));
-            crops.Add(new Crop("radish", 6, 1000, 40, 90)); //harvestable once
-            crops.Add(new Crop("poppy", 7, 1000, 100, 140)); //harvestable once
-            crops.Add(new Crop("spangle", 8, 1000, 50, 90)); //harvestable once
-            //crops.Add(new Crop("wheat", 4, 1000, 10, 25)); //harvestable once. Very profitable, but takes too much labor to be taken seriously. Good if you don't have enough money for anything else, I suppose.
-            //crops.Add(new Crop("corn", 14, 4, 150, 50)); // Corn is weird, but it's also kinda a joke in it's unprofitability. So ignoring.
-
-            //lvCrops.ItemsSource = crops;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            PlantSchedule schedule;
-            float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
-
-           Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
-            schedule.PrettyPrint();
-        }
-
-        private void addExpenseButton_Click(object sender, RoutedEventArgs e)
-        {
-            var app = Application.Current;
-            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
-            expenseReport?.LineItems.Add(new LineItem());
-        }
-
-        private void viewChartButton_Click(object sender, RoutedEventArgs e)
-        {
-            //var dlg = new ViewChartWindow { Owner = this };
-            //dlg.Show();
-        }
-
-        private void okButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(
-                "Expense Report Created!",
-                "ExpenseIt Standalone",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
-
-            DialogResult = true;
-        }
-
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
-    }
-
-
-
     /// <summary>
     ///     EditBox is a custom cotrol that can switch between two modes:
     ///     editing and normal. When it is in editing mode, the content is
@@ -103,8 +37,8 @@ namespace StardewCropCalculator
         /// </summary>
         static EditBox()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(EditBox),
-                new FrameworkPropertyMetadata(typeof(EditBox)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof (EditBox),
+                new FrameworkPropertyMetadata(typeof (EditBox)));
         }
 
         #endregion
@@ -137,7 +71,7 @@ namespace StardewCropCalculator
             HookItemsControlEvents();
 
             _listViewItem = GetDependencyObjectFromVisualTree(this,
-                typeof(ListViewItem)) as ListViewItem;
+                typeof (ListViewItem)) as ListViewItem;
 
             Debug.Assert(_listViewItem != null, "No ListViewItem found");
         }
@@ -219,8 +153,8 @@ namespace StardewCropCalculator
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register(
                 "Value",
-                typeof(object),
-                typeof(EditBox),
+                typeof (object),
+                typeof (EditBox),
                 new FrameworkPropertyMetadata(null));
 
         /// <summary>
@@ -242,8 +176,8 @@ namespace StardewCropCalculator
         public static DependencyProperty IsEditingProperty =
             DependencyProperty.Register(
                 "IsEditing",
-                typeof(bool),
-                typeof(EditBox),
+                typeof (bool),
+                typeof (EditBox),
                 new FrameworkPropertyMetadata(false));
 
         /// <summary>
@@ -251,7 +185,7 @@ namespace StardewCropCalculator
         /// </summary>
         public bool IsEditing
         {
-            get { return (bool)GetValue(IsEditingProperty); }
+            get { return (bool) GetValue(IsEditingProperty); }
             private set
             {
                 SetValue(IsEditingProperty, value);
@@ -323,7 +257,7 @@ namespace StardewCropCalculator
         private void HookItemsControlEvents()
         {
             _itemsControl = GetDependencyObjectFromVisualTree(this,
-                typeof(ItemsControl)) as ItemsControl;
+                typeof (ItemsControl)) as ItemsControl;
             if (_itemsControl != null)
             {
                 //Handle the Resize/ScrollChange/MouseWheel 
@@ -407,154 +341,4 @@ namespace StardewCropCalculator
 
         #endregion
     }
-
-    /// <summary>
-    ///     An adorner class that contains a TextBox to provide editing capability
-    ///     for an EditBox control. The editable TextBox resides in the
-    ///     AdornerLayer. When the EditBox is in editing mode, the TextBox is given a size
-    ///     it with desired size; otherwise, arrange it with size(0,0,0,0).
-    /// </summary>
-    internal sealed class EditBoxAdorner : Adorner
-    {
-        /// <summary>
-        ///     Inialize the EditBoxAdorner.
-        /// </summary>
-        public EditBoxAdorner(UIElement adornedElement, UIElement adorningElement) : base(adornedElement)
-        {
-            var textBox = adorningElement as TextBox;
-            if (textBox == null) throw new ArgumentException("adorningElement is not a TextBox.");
-            _textBox = textBox;
-
-            _visualChildren = new VisualCollection(this);
-
-            BuildTextBox();
-        }
-
-        #region Public Methods
-
-        /// <summary>
-        ///     Specifies whether a TextBox is visible
-        ///     when the IsEditing property changes.
-        /// </summary>
-        /// <param name="isVisible"></param>
-        public void UpdateVisibilty(bool isVisible)
-        {
-            _isVisible = isVisible;
-            InvalidateMeasure();
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <summary>
-        ///     Override to measure elements.
-        /// </summary>
-        protected override Size MeasureOverride(Size constraint)
-        {
-            _textBox.IsEnabled = _isVisible;
-            //if in editing mode, measure the space the adorner element 
-            //should cover.
-            if (_isVisible)
-            {
-                AdornedElement.Measure(constraint);
-                _textBox.Measure(constraint);
-
-                //since the adorner is to cover the EditBox, it should return 
-                //the AdornedElement.Width, the extra 15 is to make it more 
-                //clear.
-                return new Size(AdornedElement.DesiredSize.Width + ExtraWidth,
-                    _textBox.DesiredSize.Height);
-            }
-            return new Size(0, 0);
-        }
-
-        /// <summary>
-        ///     override function to arrange elements.
-        /// </summary>
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            if (_isVisible)
-            {
-                _textBox.Arrange(new Rect(0, 0, finalSize.Width,
-                    finalSize.Height));
-            }
-            else // if is not is editable mode, no need to show elements.
-            {
-                _textBox.Arrange(new Rect(0, 0, 0, 0));
-            }
-            return finalSize;
-        }
-
-        /// <summary>
-        ///     override property to return infomation about visual tree.
-        /// </summary>
-        protected override int VisualChildrenCount => _visualChildren.Count;
-
-        /// <summary>
-        ///     override function to return infomation about visual tree.
-        /// </summary>
-        protected override Visual GetVisualChild(int index) => _visualChildren[index];
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        ///     Initialize necessary properties and hook necessary events on TextBox,
-        ///     then add it into tree.
-        /// </summary>
-        private void BuildTextBox()
-        {
-            _canvas = new Canvas();
-            _canvas.Children.Add(_textBox);
-            _visualChildren.Add(_canvas);
-
-            //Bind Text onto AdornedElement.
-            var binding = new Binding("Text")
-            {
-                Mode = BindingMode.TwoWay,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Source = AdornedElement
-            };
-
-            _textBox.SetBinding(TextBox.TextProperty, binding);
-
-            // when layout finishes.
-            _textBox.LayoutUpdated += OnTextBoxLayoutUpdated;
-        }
-
-        /// <summary>
-        ///     When Layout finish, if in editable mode, update focus status
-        ///     on TextBox.
-        /// </summary>
-        private void OnTextBoxLayoutUpdated(object sender, EventArgs e)
-        {
-            if (_isVisible) _textBox.Focus();
-        }
-
-        #endregion
-
-        #region Private Variables
-
-        // Visual children
-        private readonly VisualCollection _visualChildren;
-
-        // The TextBox that this adorner covers.
-        private readonly TextBox _textBox;
-
-        // Whether the EditBox is in editing mode which means the Adorner is visible.
-        private bool _isVisible;
-
-        // Canvas that contains the TextBox that provides the ability for it to 
-        // display larger than the current size of the cell so that the entire
-        // contents of the cell can be edited
-        private Canvas _canvas;
-
-        // Extra padding for the content when it is displayed in the TextBox
-        private const double ExtraWidth = 15;
-
-        #endregion
-    }
-
 }

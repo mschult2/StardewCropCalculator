@@ -4,46 +4,157 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StardewCropCalculator"
-        mc:Ignorable="d"
-        Title="Stardew Valley Crop Profit Maximizer" Height="450" Width="800">
+        DataContext="{StaticResource ExpenseData}"
+        Icon="Watermark.png"
+        Title="Stardew Crop Profit Maximizer"
+        MinWidth="600" MinHeight="500"
+        SizeToContent="WidthAndHeight"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+
     <Window.Resources>
-        <Style x:Key="{x:Type local:EditBox}" TargetType="{x:Type local:EditBox}" >
-            <Setter Property="HorizontalAlignment" Value="Left"  />
+        <Style x:Key="ReadOnlyText" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,5,5,0" />
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+
+        <Style x:Key="FunctionButton" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5,5,5,0" />
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="MinWidth" Value="80" />
+        </Style>
+
+        <Style x:Key="TableLabel" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="10pt" />
+            <Setter Property="Padding" Value="5,0,5,0" />
+        </Style>
+
+        <Style x:Key="TableLabelRightAligned" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TableLabel}">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="CommandButtonPanel" TargetType="{x:Type StackPanel}">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="SeparatorRectangle" TargetType="{x:Type Rectangle}" BasedOn="{StaticResource TotalRectangle}">
+            <Setter Property="Height" Value="3" />
+            <Setter Property="RadiusX" Value="2" />
+            <Setter Property="RadiusY" Value="2" />
+        </Style>
+
+        <Style x:Key="TopSeparatorRectangle" TargetType="{x:Type Rectangle}"
+               BasedOn="{StaticResource SeparatorRectangle}">
+            <Setter Property="Margin" Value="5,10,5,5" />
+        </Style>
+
+        <Style x:Key="BottomSeparatorRectangle" TargetType="{x:Type Rectangle}"
+               BasedOn="{StaticResource SeparatorRectangle}">
+            <Setter Property="Margin" Value="5,10,5,0" />
+        </Style>
+
+        <Style x:Key="ExpenseScroller" TargetType="{x:Type ItemsControl}">
+            <Setter Property="Margin" Value="10,0,10,0" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type local:EditBox}">
-                        <TextBlock x:Name="PART_TextBlockPart"  
-                 Text="{Binding Path=Value,RelativeSource = 
-                       {RelativeSource TemplatedParent}}">
-                        </TextBlock>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel IsItemsHost="True" />
+                        </ScrollViewer>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ExpenseChartSmall" TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource ExpenseChart}">
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="MinHeight" Value="70" />
+            <Setter Property="MaxWidth" Value="100" />
+            <Setter Property="MaxHeight" Value="70" />
+            <Setter Property="Margin" Value="5,5,5,5" />
+        </Style>
+
+        <DataTemplate x:Key="ExpenseTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Path=Type}" Grid.Column="0" />
+                <TextBox Text="{Binding Path=Description}" Grid.Column="1" />
+                <TextBox Grid.Column="2" TextAlignment="Right">
+                    <TextBox.Text>
+                        <Binding Path="Cost" UpdateSourceTrigger="PropertyChanged">
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+            </Grid>
+        </DataTemplate>
+
     </Window.Resources>
+
     <Grid>
-        <ListView Margin="10" Name="lvCrops">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Crop Name" Width="100" DisplayMemberBinding="{Binding name}" />
-                    <GridViewColumn Header="Time to Maturity" Width="130" DisplayMemberBinding="{Binding timeToMaturity}" />
-                    <GridViewColumn Header="Time between Harvests" Width="150" DisplayMemberBinding="{Binding yieldRate}" />
-                    <GridViewColumn Header="Cost" Width="100" DisplayMemberBinding="{Binding buyPrice}" />
 
-                    <GridViewColumn Header="Sell" Width="100" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <local:EditBox Height="25" Value="{Binding Path=sellPrice}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+        <!-- Watermark -->
+        <Image Style="{StaticResource WatermarkImage}" />
 
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <!-- Expense Report List -->
+            <Rectangle Style="{StaticResource TotalRectangle}" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+            <Grid Style="{StaticResource TotalHeaderGrid}" Grid.Row="2" Grid.ColumnSpan="2">
 
-        <Button Content="Compute" HorizontalAlignment="Left" Margin="350,268,0,0" VerticalAlignment="Top" Width="80" Click="Button_Click"/>
+                <Grid.ToolTip>
+                    <TextBlock>Expense Report</TextBlock>
+                </Grid.ToolTip>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#73B2F5" Offset="0" />
+                        <GradientStop Color="#4E87D4" Offset="1" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <!-- Expense Type Column Header -->
+                <TextBlock Style="{StaticResource TableLabel}" Grid.Column="0">
+                    Expense Type
+                    <TextBlock.ToolTip>
+                        <TextBlock>Expense type</TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+
+                <!-- Description Column Header -->
+                <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1">
+                    Description
+                    <TextBlock.ToolTip>
+                        <TextBlock>Desription</TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+
+                <!-- Amount Column Header -->
+                <TextBlock Style="{StaticResource TableLabelRightAligned}" Grid.Column="2">
+                    Amount
+                    <TextBlock.ToolTip>
+                        <TextBlock>Amount</TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+            </Grid>
+            <ItemsControl Name="expensesItemsControl"
+                          Style="{StaticResource ExpenseScroller}"
+                          Grid.Row="3" Grid.ColumnSpan="2"
+                          ItemTemplate="{StaticResource ExpenseTemplate}"
+                          ItemsSource="{Binding Path=LineItems}" />
+
     </Grid>
-</Window>
 
-    
+</Window>
