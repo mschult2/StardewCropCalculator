@@ -7,27 +7,39 @@ namespace StardewCropCalculator
 {
     public class LineItem : INotifyPropertyChanged
     {
-        private int _cost;
-        private string _description = "(Description)";
-        private string _type = "(Expense type)";
+        private string _name = "(Crop Name)";
+        private int _timeToMature = 1000;
+        private int _timeBetweenHarvests = 1000;
+        private int _cost = 0;
+        private int _sell = 0;
 
-        public string Type
+        public string Name
         {
-            get { return _type; }
+            get { return _name; }
             set
             {
-                _type = value;
-                OnPropertyChanged("Type");
+                _name = value;
+                OnPropertyChanged("Name");
             }
         }
 
-        public string Description
+        public int TimeToMature
         {
-            get { return _description; }
+            get { return _timeToMature; }
             set
             {
-                _description = value;
-                OnPropertyChanged("Description");
+                _timeToMature = value;
+                OnPropertyChanged("TimeToMature");
+            }
+        }
+
+        public int TimeBetweenHarvests
+        {
+            get { return _timeBetweenHarvests; }
+            set
+            {
+                _timeBetweenHarvests = value;
+                OnPropertyChanged("TimeBetweenHarvests");
             }
         }
 
@@ -38,6 +50,16 @@ namespace StardewCropCalculator
             {
                 _cost = value;
                 OnPropertyChanged("Cost");
+            }
+        }
+
+        public int Sell
+        {
+            get { return _sell; }
+            set
+            {
+                _sell = value;
+                OnPropertyChanged("Sell");
             }
         }
 

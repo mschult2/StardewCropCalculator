@@ -103,13 +103,22 @@
                        EmployeeNumber="57304"
                        CostCenter="4032">
             <ExpenseReport.LineItems>
-                <LineItem Type="Meal" Description="Mexican Lunch" Cost="12" />
-                <LineItem Type="Meal" Description="Italian Dinner" Cost="45" />
-                <LineItem Type="Education" Description="Developer Conference" Cost="90" />
-                <LineItem Type="Travel" Description="Taxi" Cost="70" />
-                <LineItem Type="Travel" Description="Hotel" Cost="60" />
+                <LineItem Name="Blueberry" TimeToMature="13" TimeBetweenHarvests="4" Cost="80" Sell="240" />
+                <LineItem Name="Hot Pepper" TimeToMature="5" TimeBetweenHarvests="3" Cost="40" Sell="40" />
+                <LineItem Name="melon" TimeToMature="12" TimeBetweenHarvests="1000" Cost="80" Sell="250" />
+                <LineItem Name="Hops" TimeToMature="11" TimeBetweenHarvests="1" Cost="60" Sell="25" />
+                <LineItem Name="Tomato" TimeToMature="11" TimeBetweenHarvests="4" Cost="50" Sell="60" />
+                <LineItem Name="Radish" TimeToMature="6" TimeBetweenHarvests="1000" Cost="40" Sell="90" />
+                <LineItem Name="Poppy" TimeToMature="7" TimeBetweenHarvests="1000" Cost="100" Sell="140" />
+                <LineItem Name="Spangle" TimeToMature="8" TimeBetweenHarvests="1000" Cost="50" Sell="90" />
             </ExpenseReport.LineItems>
         </ExpenseReport>
+
+        <Style x:Key="CommandButton" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="0,10,5,5" />
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="MinWidth" Value="80" />
+        </Style>
 
     </Application.Resources>
 </Application>

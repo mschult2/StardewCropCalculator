@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardewCropCalculator
+namespace StardewCropCalculatorLibrary
 {
     /// <summary>
     /// Daily planting schedule for the given time period.
     /// </summary>
-    class PlantSchedule
+    public class PlantSchedule
     {
         // The crops planted on a given day. Index represents the day, from day 1 to day n. 0 index is unused.
         // Technically there can be multiple crops planted on a given day, but the max-profit algorithm (cf: MaxTotalWealth()) will likely never decide to do so.
@@ -107,19 +107,37 @@ namespace StardewCropCalculator
         /// <summary>
         /// Print the crops planted on each day.
         /// </summary>
-        public void PrettyPrint()
+        override public string ToString() 
         {
+            StringBuilder sb = new StringBuilder();
+
             for (int day = 1; day < plantingSchedule.Length; ++day)
             {
-                Debug.WriteLine("Day " + day + ": ");
+                sb.AppendLine("Day " + day + ": ");
 
-                foreach (Crop crop in plantingSchedule[day])
+                // Should generally only be one distinct item.
+                var distinctCrops = plantingSchedule[day].Distinct();
+
+                if (distinctCrops.Count() > 1)
                 {
-                    Debug.Write(crop.name + ", ");
+                    sb.AppendLine("WARNING! The algorithm is suggesting you buy multiple crops, which is unusual.");
+
+                    foreach (Crop crop in distinctCrops)
+                        sb.Append(crop.name + ", ");
+                }
+                else if (distinctCrops.Count() == 1)
+                {
+                    sb.Append(distinctCrops.First().name);
                 }
 
-                Debug.WriteLine("--");
+                if (plantingSchedule[day].Count != 0) sb.AppendLine();
+                sb.AppendLine("--");
             }
+
+            string scheduleStr = sb.ToString();
+            Debug.WriteLine(scheduleStr);
+
+            return scheduleStr;
         }
     }
 }

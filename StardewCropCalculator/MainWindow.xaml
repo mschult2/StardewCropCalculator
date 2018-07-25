@@ -9,7 +9,6 @@
         Title="Stardew Crop Profit Maximizer"
         MinWidth="600" MinHeight="500"
         SizeToContent="WidthAndHeight"
-        ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
@@ -85,10 +84,15 @@
                     <ColumnDefinition Width="33*" />
                     <ColumnDefinition Width="33*" />
                     <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
+                    <ColumnDefinition Width="33*" />
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Path=Type}" Grid.Column="0" />
-                <TextBox Text="{Binding Path=Description}" Grid.Column="1" />
-                <TextBox Grid.Column="2" TextAlignment="Right">
+                <TextBox Text="{Binding Path=Name}" Grid.Column="0" />
+                <TextBox Text="{Binding Path=TimeToMature}" Grid.Column="1" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=TimeBetweenHarvests}" Grid.Column="2" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=Cost}" Grid.Column="3" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=Sell}" Grid.Column="4" TextAlignment="Right" />
+                <TextBox Grid.Column="3" TextAlignment="Right" >
                     <TextBox.Text>
                         <Binding Path="Cost" UpdateSourceTrigger="PropertyChanged">
                         </Binding>
@@ -101,59 +105,95 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="140*"/>
+        </Grid.RowDefinitions>
 
         <!-- Watermark -->
-        <Image Style="{StaticResource WatermarkImage}" />
+        <Image Style="{StaticResource WatermarkImage}" Grid.RowSpan="2" />
+
+        <!-- Add Expense Button -->
+        <Button Style="{StaticResource FunctionButton}" Click="addCropButton_Click" Margin="339,31,200,0.333">
+            Add _Crop
+            <Button.ToolTip>
+                <TextBlock>Create a new row to add an additional crop</TextBlock>
+            </Button.ToolTip>
+        </Button>
+
+        <!-- Ok Button -->
+        <Button Style="{StaticResource CommandButton}" Click="computeButton_Click" IsDefault="True" Margin="451,26,51.667,415.333" Grid.RowSpan="2">
+            _Compute Schedule
+            <Button.ToolTip>
+                <TextBlock>This will compute the answer, i.e. the optimal planting schedule.</TextBlock>
+            </Button.ToolTip>
+        </Button>
 
         <!-- Expense Report List -->
-            <Rectangle Style="{StaticResource TotalRectangle}" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" />
-            <Grid Style="{StaticResource TotalHeaderGrid}" Grid.Row="2" Grid.ColumnSpan="2">
+        <Rectangle Style="{StaticResource TotalRectangle}" Margin="10,35.333,10.333,9.667" Grid.Row="1" />
+        <Grid Style="{StaticResource TotalHeaderGrid}" Margin="10,43.333,10.333,327.667" Grid.Row="1">
 
-                <Grid.ToolTip>
-                    <TextBlock>Expense Report</TextBlock>
-                </Grid.ToolTip>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="33*" />
-                    <ColumnDefinition Width="33*" />
-                    <ColumnDefinition Width="33*" />
-                </Grid.ColumnDefinitions>
+            <Grid.ToolTip>
+                <TextBlock>Expense Report</TextBlock>
+            </Grid.ToolTip>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="99*" />
+                <ColumnDefinition Width="145*" />
+                <ColumnDefinition Width="329*" />
+            </Grid.ColumnDefinitions>
 
-                <Grid.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#73B2F5" Offset="0" />
-                        <GradientStop Color="#4E87D4" Offset="1" />
-                    </LinearGradientBrush>
-                </Grid.Background>
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#73B2F5" Offset="0" />
+                    <GradientStop Color="#4E87D4" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
 
-                <!-- Expense Type Column Header -->
-                <TextBlock Style="{StaticResource TableLabel}" Grid.Column="0">
-                    Expense Type
-                    <TextBlock.ToolTip>
-                        <TextBlock>Expense type</TextBlock>
-                    </TextBlock.ToolTip>
+            <!-- Crop Column Header -->
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="0" Height="18" Margin="38,23,0,8" Width="40" RenderTransformOrigin="1.254,0.78" FontSize="10">
+                    Crop
+                <TextBlock.ToolTip>
+                    <TextBlock>Crop</TextBlock>
+                </TextBlock.ToolTip>
                 </TextBlock>
 
-                <!-- Description Column Header -->
-                <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1">
-                    Description
-                    <TextBlock.ToolTip>
-                        <TextBlock>Desription</TextBlock>
-                    </TextBlock.ToolTip>
+            <!-- Time to Mature Column Header -->
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1" Height="18" Margin="27.333,23,0,8" Width="108" FontSize="10">
+                    Time to Mature
+                <TextBlock.ToolTip>
+                    <TextBlock>Time to Mature</TextBlock>
+                </TextBlock.ToolTip>
                 </TextBlock>
 
-                <!-- Amount Column Header -->
-                <TextBlock Style="{StaticResource TableLabelRightAligned}" Grid.Column="2">
-                    Amount
-                    <TextBlock.ToolTip>
-                        <TextBlock>Amount</TextBlock>
-                    </TextBlock.ToolTip>
+            <!-- Time Between Harvests -->
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1" Height="18" Margin="124.333,23,0,8" Width="157" Grid.ColumnSpan="2" FontSize="10">
+                    Time Between Harvests
+                <TextBlock.ToolTip>
+                    <TextBlock>Time Between Harvests</TextBlock>
+                </TextBlock.ToolTip>
                 </TextBlock>
-            </Grid>
-            <ItemsControl Name="expensesItemsControl"
+
+            <!-- Cost -->
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="2" Height="18" Margin="141,23,0,8" Width="37" FontSize="10">
+                    Cost
+                <TextBlock.ToolTip>
+                    <TextBlock>Cost</TextBlock>
+                </TextBlock.ToolTip>
+                </TextBlock>
+
+            <!-- Sell -->
+            <TextBlock Style="{StaticResource TableLabelRightAligned}" Grid.Column="2" Height="18" Margin="0,23,44.333,8" Width="32" FontSize="10">
+                   Sell
+                <TextBlock.ToolTip>
+                    <TextBlock>Sell</TextBlock>
+                </TextBlock.ToolTip>
+                </TextBlock>
+
+        </Grid>
+        <ItemsControl Name="expensesItemsControl"
                           Style="{StaticResource ExpenseScroller}"
-                          Grid.Row="3" Grid.ColumnSpan="2"
                           ItemTemplate="{StaticResource ExpenseTemplate}"
-                          ItemsSource="{Binding Path=LineItems}" />
+                          ItemsSource="{Binding Path=LineItems}" Margin="10,92.333,10.333,-165.333" Grid.Row="1" FontSize="10" />
 
     </Grid>
 

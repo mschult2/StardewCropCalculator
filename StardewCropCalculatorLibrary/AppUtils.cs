@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardewCropCalculator
+namespace StardewCropCalculatorLibrary
 {
     /// <summary>
     /// Static utility functions for this Stardrew application.

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardewCropCalculator
+namespace StardewCropCalculatorLibrary
 {
-    class Crop
+    public class Crop
     {
         public int timeToMaturity { get; set; }
         public int yieldRate { get; set; }

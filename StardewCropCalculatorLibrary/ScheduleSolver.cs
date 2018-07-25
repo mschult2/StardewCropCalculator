@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardewCropCalculator
+namespace StardewCropCalculatorLibrary
 {
     /// <summary>
     /// This is the key class - it computes the planting schedule which maximizes profit.
     /// </summary>
-    static class ScheduleSolver
+    public static class ScheduleSolver
     {
         /// <summary>
         /// The maximized wealth FACTOR from planting any crops throughout the season, starting from the day given. Note that return is a measure of total wealth. So 2.0 means money was doubled.

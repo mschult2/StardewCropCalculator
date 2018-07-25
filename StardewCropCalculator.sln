@@ -4,8 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StardewCropCalculator", "StardewCropCalculator\StardewCropCalculator.csproj", "{77DC6A2C-EB09-4127-8525-C26F4C23FA23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F990F7EA-29C0-4F21-8C50-FE2115842461} = {F990F7EA-29C0-4F21-8C50-FE2115842461}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditBoxControlLibrary", "EditBoxControlLibrary\EditBoxControlLibrary.csproj", "{558EEE03-6927-4FE6-AEB6-972769960849}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StardewCropCalculatorLibrary", "StardewCropCalculatorLibrary\StardewCropCalculatorLibrary.csproj", "{F990F7EA-29C0-4F21-8C50-FE2115842461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{558EEE03-6927-4FE6-AEB6-972769960849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{558EEE03-6927-4FE6-AEB6-972769960849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{558EEE03-6927-4FE6-AEB6-972769960849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F990F7EA-29C0-4F21-8C50-FE2115842461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F990F7EA-29C0-4F21-8C50-FE2115842461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F990F7EA-29C0-4F21-8C50-FE2115842461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F990F7EA-29C0-4F21-8C50-FE2115842461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

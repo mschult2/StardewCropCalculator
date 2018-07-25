@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using StardewCropCalculatorLibrary;
 
 namespace StardewCropCalculator
 {
@@ -24,21 +25,21 @@ namespace StardewCropCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Crop> crops;
+        //List<Crop> crops;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            crops = new List<Crop>();
-            crops.Add(new Crop("blueberry", 13, 4, 80, 240));
-            crops.Add(new Crop("hot pepper", 5, 3, 40, 40));
-            crops.Add(new Crop("melon", 12, 1000, 80, 250)); // only harvetable once
-            crops.Add(new Crop("hops", 11, 1, 60, 25));
-            crops.Add(new Crop("tomato", 11, 4, 50, 60));
-            crops.Add(new Crop("radish", 6, 1000, 40, 90)); //harvestable once
-            crops.Add(new Crop("poppy", 7, 1000, 100, 140)); //harvestable once
-            crops.Add(new Crop("spangle", 8, 1000, 50, 90)); //harvestable once
+            //crops = new List<Crop>();
+            //crops.Add(new Crop("blueberry", 13, 4, 80, 240));
+            //crops.Add(new Crop("hot pepper", 5, 3, 40, 40));
+            //crops.Add(new Crop("melon", 12, 1000, 80, 250)); // only harvetable once
+            //crops.Add(new Crop("hops", 11, 1, 60, 25));
+            //crops.Add(new Crop("tomato", 11, 4, 50, 60));
+            //crops.Add(new Crop("radish", 6, 1000, 40, 90)); //harvestable once
+            //crops.Add(new Crop("poppy", 7, 1000, 100, 140)); //harvestable once
+            //crops.Add(new Crop("spangle", 8, 1000, 50, 90)); //harvestable once
             //crops.Add(new Crop("wheat", 4, 1000, 10, 25)); //harvestable once. Very profitable, but takes too much labor to be taken seriously. Good if you don't have enough money for anything else, I suppose.
             //crops.Add(new Crop("corn", 14, 4, 150, 50)); // Corn is weird, but it's also kinda a joke in it's unprofitability. So ignoring.
 
@@ -47,35 +48,48 @@ namespace StardewCropCalculator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PlantSchedule schedule;
-            float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
+           // PlantSchedule schedule;
+           // float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
 
-           Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
-            schedule.PrettyPrint();
+           //Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
+           // schedule.PrettyPrint();
         }
 
-        private void addExpenseButton_Click(object sender, RoutedEventArgs e)
+        private void addCropButton_Click(object sender, RoutedEventArgs e)
         {
             var app = Application.Current;
             var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
             expenseReport?.LineItems.Add(new LineItem());
         }
 
-        private void viewChartButton_Click(object sender, RoutedEventArgs e)
+        private void computeButton_Click(object sender, RoutedEventArgs e)
         {
-            //var dlg = new ViewChartWindow { Owner = this };
-            //dlg.Show();
-        }
+            // Populate crop list.
+            List<Crop> crops = new List<Crop>();
+            var app = Application.Current;
+            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
+            if (expenseReport != null)
+            {
+                foreach (var item in expenseReport.LineItems)
+                {
+                    crops.Add(new Crop(item.Name, item.TimeToMature, item.TimeBetweenHarvests, item.Cost, item.Sell));
+                }
+            }
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
-        {
+            // Calculate optimal schedule.
+            PlantSchedule schedule;
+            float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
+
+            Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
+            string scheduleStr = schedule.ToString();
+
             MessageBox.Show(
-                "Expense Report Created!",
-                "ExpenseIt Standalone",
+                "Highest profit planting schedule: " + maximizedWealthFactor + "x gold increase\n\n" + scheduleStr,
+                "Most Profitable Planting Schedule",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
-            DialogResult = true;
+            //DialogResult = true;
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
