@@ -59,14 +59,24 @@ namespace StardewCropCalculatorLibrary
         }
 
         /// <summary>
-        /// Add crop to planting schedule.
+        /// Add crop to the list of crops for this day.
         /// </summary>
         public void AddCrop(int day, Crop crop)
         {
             if (plantingSchedule[day] == null)
                 plantingSchedule[day] = new List<Crop>();
 
+            plantingSchedule[day].Add(crop);
+        }
 
+        /// <summary>
+        /// Set crop as the only crop for this day.
+        /// </summary>
+        /// <param name="day"></param>
+        /// <param name="crop"></param>
+        public void SetCrop(int day, Crop crop)
+        {
+            plantingSchedule[day] = new List<Crop>();
             plantingSchedule[day].Add(crop);
         }
 

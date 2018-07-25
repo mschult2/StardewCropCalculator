@@ -43,6 +43,7 @@
     <Compile Include="AppUtils.cs" />
     <Compile Include="Crop.cs" />
     <Compile Include="PlantSchedule.cs" />
+    <Compile Include="PlantScheduleFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleSolver.cs" />
   </ItemGroup>

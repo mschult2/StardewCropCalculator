@@ -32,15 +32,21 @@ namespace StardewCropCalculatorLibrary
             this.sellPrice = sellPrice;
         }
 
+        // If something costs $1 and sells for $3, its "multiple of money" is 3.  I.e., your money triples.
+        public float InvestmentMultiple(int day, int maxDays)
+        {
+            return Return(day, maxDays) + 1;
+        }
+
         /// <summary>
-        /// The measure of PROFIT (as a multiple of the original cost).
+        /// The measure of PROFIT when harvesting this plant over the course of the year (as a multiple of the original cost).
         /// So a return of 2.0 means your profit is double the cost, which means you tripled your money. A return of 0 means no profit was made (and no money lost).
         /// A return of -1 means all money was lost.
         /// </summary>
         /// <param name="day">day crop is planted</param>
         /// <param name="maxDays">days in the season</param>
         /// <returns></returns>
-        public float CropReturn(int day, int maxDays)
+        public float Return(int day, int maxDays)
         {
             return ((NumHarvests(day, maxDays) * sellPrice) - buyPrice) / buyPrice;
         }
@@ -53,6 +59,9 @@ namespace StardewCropCalculatorLibrary
         /// <returns></returns>
         public int NumHarvests(int dayPlanted, int maxDays)
         {
+            if (dayPlanted < 1 || maxDays < 1 || dayPlanted > maxDays)
+                throw new Exception("dayPlanted and maxDays must be greater than 0, and dayPlanted must be less than or equal to maxDays.");
+
             int numHarvests = (int)((maxDays - dayPlanted - timeToMaturity + yieldRate) / yieldRate); // rounds to floor
 
             return numHarvests < 0 ? 0 : numHarvests;

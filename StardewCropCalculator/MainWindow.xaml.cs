@@ -30,29 +30,6 @@ namespace StardewCropCalculator
         public MainWindow()
         {
             InitializeComponent();
-
-            //crops = new List<Crop>();
-            //crops.Add(new Crop("blueberry", 13, 4, 80, 240));
-            //crops.Add(new Crop("hot pepper", 5, 3, 40, 40));
-            //crops.Add(new Crop("melon", 12, 1000, 80, 250)); // only harvetable once
-            //crops.Add(new Crop("hops", 11, 1, 60, 25));
-            //crops.Add(new Crop("tomato", 11, 4, 50, 60));
-            //crops.Add(new Crop("radish", 6, 1000, 40, 90)); //harvestable once
-            //crops.Add(new Crop("poppy", 7, 1000, 100, 140)); //harvestable once
-            //crops.Add(new Crop("spangle", 8, 1000, 50, 90)); //harvestable once
-            //crops.Add(new Crop("wheat", 4, 1000, 10, 25)); //harvestable once. Very profitable, but takes too much labor to be taken seriously. Good if you don't have enough money for anything else, I suppose.
-            //crops.Add(new Crop("corn", 14, 4, 150, 50)); // Corn is weird, but it's also kinda a joke in it's unprofitability. So ignoring.
-
-            //lvCrops.ItemsSource = crops;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-           // PlantSchedule schedule;
-           // float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
-
-           //Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
-           // schedule.PrettyPrint();
         }
 
         private void addCropButton_Click(object sender, RoutedEventArgs e)
@@ -77,14 +54,16 @@ namespace StardewCropCalculator
             }
 
             // Calculate optimal schedule.
-            PlantSchedule schedule;
-            float maximizedWealthFactor = ScheduleSolver.MaxTotalWealth(crops, out schedule, 1, 28);
+            PlantScheduleFactory scheduleFactory = new PlantScheduleFactory(28);
 
-            Debug.WriteLine("\nmaximizedWealthFactor: " + maximizedWealthFactor + "\n");
-            string scheduleStr = schedule.ToString();
+            PlantSchedule bestSchedule;
+            float maxWealthMultiple = scheduleFactory.GetBestSchedule(crops, out bestSchedule);
+
+            Debug.WriteLine("\nmaxWealthMultiple: " + maxWealthMultiple + "\n");
+            string scheduleStr = bestSchedule.ToString();
 
             MessageBox.Show(
-                "Highest profit planting schedule: " + maximizedWealthFactor + "x gold increase\n\n" + scheduleStr,
+                "Highest-profit planting schedule: " + maxWealthMultiple + "x gold increase\n\n" + scheduleStr,
                 "Most Profitable Planting Schedule",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

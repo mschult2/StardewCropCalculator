@@ -29,7 +29,7 @@ namespace StardewCropCalculatorLibrary
                 hypotheticalSchedule.AddCrop(day, crop);
 
                 // Extract some needed values
-                float cropReturn = crop.CropReturn(day, maxDays);
+                float cropReturn = crop.Return(day, maxDays);
                 float cropWealth = cropReturn + 1;
                 int numHarvests = crop.NumHarvests(day, maxDays);
 
