@@ -59,6 +59,21 @@ namespace StardewCropCalculatorLibrary
         }
 
         /// <summary>
+        /// Returns the first crop listed on a particular day (there should generally only be one, anyway)
+        /// </summary>
+        /// <param name="day"></param>
+        /// <returns>Null if no crop on this day</returns>
+        public Crop GetCrop(int day)
+        {
+            var crops = plantingSchedule[day];
+
+            if (crops == null || crops.Count == 0)
+                return null;
+            else
+                return crops.First();
+        }
+
+        /// <summary>
         /// Add crop to the list of crops for this day.
         /// </summary>
         public void AddCrop(int day, Crop crop)

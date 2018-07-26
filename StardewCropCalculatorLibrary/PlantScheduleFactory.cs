@@ -22,11 +22,6 @@ namespace StardewCropCalculatorLibrary
             /// The maximum CUMULATIVE investment multiple that can be obtained from planting this crop on a particular day. (E.g., 3x means tripling you money.)
             /// Accounts for reinvestment of interest.
             public float[] cumMultiple;
-
-            /// Indicates the primary days you'll be able to buy seeds on, because you got a payday from a harvest.
-            /// The other days are there just in case you get extra money some other way.
-            /// (This schedule assumes you reinvestment all profit as instructed by the schedule)
-            public bool[] canPlant;
         }
         #endregion
 
@@ -43,9 +38,6 @@ namespace StardewCropCalculatorLibrary
 
             memo.cumMultiple = new float[numDays + 1]; // array goes from day 0 (unused) to day numDays for ease of access
             memo.cumMultiple = memo.cumMultiple.Select(x => 1F).ToArray(); // If you don't plant, your money multiplies by 1x (no change)
-
-            memo.canPlant = new bool[numDays + 1];
-            memo.canPlant = memo.canPlant.Select(x => false).ToArray();
         }
 
         /// <summary>
@@ -92,6 +84,38 @@ namespace StardewCropCalculatorLibrary
             // Return memo, which is now filled out with the best schedule.
             schedule = new PlantSchedule(memo.schedule);
             return memo.cumMultiple[1];
+        }
+
+        /// This method tells you the actual days to plant on for the last schedule computed. Based on when you get money from harvests.
+        /// Returns an array of size numDays - true means you are scheduled to plant on that day.
+        /// NOTE: this is a nonessential detail, since you can just buy the best crop of the day whenever you have money. 
+        public bool[] GetPlantingDays()
+        {
+            bool[] plantingDays = new bool[numDays + 1];
+            plantingDays = plantingDays.Select(x => false).ToArray();
+
+            int day = 1;
+            plantingDays[1] = true;
+
+            while (day <= numDays && memo.schedule.GetCrop(day) != null)
+            {
+                if (!plantingDays[day])
+                {
+                    ++day;
+                    continue;
+                }
+
+                Crop crop = memo.schedule.GetCrop(day);
+
+                for (int harvestDay = day + crop.timeToMaturity; harvestDay <= numDays; harvestDay = harvestDay + crop.yieldRate)
+                {
+                    plantingDays[harvestDay] = true;
+                }
+
+                ++day;
+            }
+
+            return plantingDays;
         }
     }
 }

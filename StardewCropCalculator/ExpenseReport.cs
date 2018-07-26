@@ -7,7 +7,7 @@ using System.ComponentModel;
 // INotifyPropertyChanged, PropertyChangedEventArgs
 
 /// <summary>
-/// UI stuff taken from the Microsoft WPF demo, ExpenseIt: 
+/// Some UI stuff taken from the Microsoft WPF demo, ExpenseIt: 
 /// https://github.com/Microsoft/WPF-Samples/tree/master/Sample%20Applications/ExpenseIt
 /// </summary>
 namespace StardewCropCalculator

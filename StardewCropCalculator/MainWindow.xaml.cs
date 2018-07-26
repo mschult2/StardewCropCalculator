@@ -25,11 +25,35 @@ namespace StardewCropCalculator
     /// </summary>
     public partial class MainWindow : Window
     {
-        //List<Crop> crops;
+        List<Week> calendar = new List<Week>();
 
         public MainWindow()
         {
             InitializeComponent();
+
+            calendar.Add(new Week());
+            calendar.Add(new Week());
+            calendar.Add(new Week());
+            calendar.Add(new Week());
+
+            dgCalendar.ItemsSource = calendar;
+        }
+
+        public class Week
+        {
+            public string Monday { get; set; }
+                    
+            public string Tuesday { get; set; }
+                    
+            public string Wednesday { get; set; }
+                    
+            public string Thursday { get; set; }
+                    
+            public string Friday { get; set; }
+                    
+            public string Saturday { get; set; }
+                    
+            public string Sunday { get; set; }
         }
 
         private void addCropButton_Click(object sender, RoutedEventArgs e)
@@ -54,19 +78,85 @@ namespace StardewCropCalculator
             }
 
             // Calculate optimal schedule.
+            int numDays = 28;
             PlantScheduleFactory scheduleFactory = new PlantScheduleFactory(28);
 
             PlantSchedule bestSchedule;
             float maxWealthMultiple = scheduleFactory.GetBestSchedule(crops, out bestSchedule);
 
+            bool[] plantingDays = scheduleFactory.GetPlantingDays();
+
+            // Debug print solution.
             Debug.WriteLine("\nmaxWealthMultiple: " + maxWealthMultiple + "\n");
             string scheduleStr = bestSchedule.ToString();
 
-            MessageBox.Show(
-                "Highest-profit planting schedule: " + maxWealthMultiple + "x gold increase\n\n" + scheduleStr,
-                "Most Profitable Planting Schedule",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            // Populate display calender.
+            calendar = new List<Week>();
+            Week week = new Week();
+
+            for (int day = 1; day <= numDays; ++day)
+            {
+                StringBuilder detailsBuilder = new StringBuilder();
+                detailsBuilder.AppendLine("Day " + day + ":");
+                detailsBuilder.AppendLine("-----");
+                detailsBuilder.AppendLine();
+
+                if (bestSchedule.GetCrop(day) != null)
+                {
+                    if (plantingDays[day])
+                    {
+                        detailsBuilder.Append(bestSchedule.GetCrop(day).name.ToUpper());
+                    }
+                    else
+                    {
+                        detailsBuilder.Append("(");
+                        detailsBuilder.Append(bestSchedule.GetCrop(day).name);
+                        detailsBuilder.Append(")");
+                    }
+
+                    detailsBuilder.AppendLine();
+                }
+
+                string details = detailsBuilder.ToString();
+
+                switch (day % 7)
+                {
+                    case 1:
+                        week.Monday = details;
+                        break;
+                    case 2:
+                        week.Tuesday = details;
+                        break;
+                    case 3:
+                        week.Wednesday = details;
+                        break;
+                    case 4:
+                        week.Thursday = details;
+                        break;
+                    case 5:
+                        week.Friday = details;
+                        break;
+                    case 6:
+                        week.Saturday = details;
+                        break;
+                    case 0:
+                        week.Sunday = details;
+                        calendar.Add(week);
+                        week = new Week();
+                        break;
+
+                    default:
+                        throw new Exception("Math is wrong in the day case statement!");
+                }
+            }
+
+            dgCalendar.ItemsSource = calendar;
+
+            //MessageBox.Show(
+            //    "Highest-profit planting schedule: " + maxWealthMultiple + "x gold increase\n\n" + scheduleStr,
+            //    "Most Profitable Planting Schedule",
+            //    MessageBoxButton.OK,
+            //    MessageBoxImage.Information);
 
             //DialogResult = true;
         }
@@ -74,6 +164,11 @@ namespace StardewCropCalculator
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void dgCalendar_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
         }
     }
 

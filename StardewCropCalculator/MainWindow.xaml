@@ -98,13 +98,12 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-
             </Grid>
         </DataTemplate>
 
     </Window.Resources>
 
-    <Grid>
+    <Grid Height="776" Width="1320">
         <Grid.RowDefinitions>
             <RowDefinition Height="17*"/>
             <RowDefinition Height="140*"/>
@@ -114,7 +113,7 @@
         <Image Style="{StaticResource WatermarkImage}" Grid.RowSpan="2" />
 
         <!-- Add Expense Button -->
-        <Button Style="{StaticResource FunctionButton}" Click="addCropButton_Click" Margin="339,31,200,0.333">
+        <Button Style="{StaticResource FunctionButton}" Click="addCropButton_Click" Margin="126,612,959,46" RenderTransformOrigin="0.112,1.035" Grid.Row="1">
             Add _Crop
             <Button.ToolTip>
                 <TextBlock>Create a new row to add an additional crop</TextBlock>
@@ -122,7 +121,7 @@
         </Button>
 
         <!-- Ok Button -->
-        <Button Style="{StaticResource CommandButton}" Click="computeButton_Click" IsDefault="True" Margin="451,26,51.667,415.333" Grid.RowSpan="2">
+        <Button Style="{StaticResource CommandButton}" Click="computeButton_Click" IsDefault="True" Margin="759,592,288,46" Grid.Row="1">
             _Compute Schedule
             <Button.ToolTip>
                 <TextBlock>This will compute the answer, i.e. the optimal planting schedule.</TextBlock>
@@ -130,8 +129,8 @@
         </Button>
 
         <!-- Expense Report List -->
-        <Rectangle Style="{StaticResource TotalRectangle}" Margin="10,35.333,10.333,9.667" Grid.Row="1" />
-        <Grid Style="{StaticResource TotalHeaderGrid}" Margin="10,43.333,10.333,327.667" Grid.Row="1">
+        <Rectangle Style="{StaticResource TotalRectangle}" Margin="10,21,843,128" Grid.Row="1" />
+        <Grid Style="{StaticResource TotalHeaderGrid}" Margin="10,40,843,600" Grid.Row="1">
 
             <Grid.ToolTip>
                 <TextBlock>Expense Report</TextBlock>
@@ -190,10 +189,14 @@
                 </TextBlock>
 
         </Grid>
+
         <ItemsControl Name="expensesItemsControl"
                           Style="{StaticResource ExpenseScroller}"
                           ItemTemplate="{StaticResource ExpenseTemplate}"
-                          ItemsSource="{Binding Path=LineItems}" Margin="10,92.333,10.333,-165.333" Grid.Row="1" FontSize="10" />
+                          ItemsSource="{Binding Path=LineItems}" Margin="13,97,843,330" FontSize="10" Grid.Row="1" />
+
+        <DataGrid Name="dgCalendar" Margin="510,21,38,128" Grid.Row="1" ColumnWidth="*" RowHeight="131" ScrollViewer.CanContentScroll="False" CanUserAddRows="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+        </DataGrid>
 
     </Grid>
 
