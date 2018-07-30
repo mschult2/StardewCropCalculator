@@ -6,7 +6,7 @@
     <Application.Resources>
         
         <Style x:Key="WatermarkImage" TargetType="{x:Type Image}">
-            <Setter Property="Source" Value="watermark.png" />
+            <Setter Property="Source" Value="Watermark.png" />
             <Setter Property="HorizontalAlignment" Value="left" />
             <Setter Property="VerticalAlignment" Value="top" />
             <Setter Property="Width" Value="230" />
@@ -105,7 +105,7 @@
             <ExpenseReport.LineItems>
                 <LineItem Name="Blueberry" TimeToMature="13" TimeBetweenHarvests="4" Cost="80" Sell="240" />
                 <LineItem Name="Hot Pepper" TimeToMature="5" TimeBetweenHarvests="3" Cost="40" Sell="40" />
-                <LineItem Name="melon" TimeToMature="12" TimeBetweenHarvests="1000" Cost="80" Sell="250" />
+                <LineItem Name="Melon" TimeToMature="12" TimeBetweenHarvests="1000" Cost="80" Sell="250" />
                 <LineItem Name="Hops" TimeToMature="11" TimeBetweenHarvests="1" Cost="60" Sell="25" />
                 <LineItem Name="Tomato" TimeToMature="11" TimeBetweenHarvests="4" Cost="50" Sell="60" />
                 <LineItem Name="Radish" TimeToMature="6" TimeBetweenHarvests="1000" Cost="40" Sell="90" />

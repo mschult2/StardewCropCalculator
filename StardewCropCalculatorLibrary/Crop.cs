@@ -12,8 +12,8 @@ namespace StardewCropCalculatorLibrary
         public int yieldRate { get; set; }
         public string name { get; set; }
 
-        public float buyPrice { get; set; }
-        public float sellPrice { get; set; }
+        public double buyPrice { get; set; }
+        public double sellPrice { get; set; }
 
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace StardewCropCalculatorLibrary
         /// <param name="yieldRate">days between succesive yields after maturity</param>
         /// <param name="buyPrice">price that the seed was bought for</param>
         /// <param name="sellPrice">price that the crop will be sold at</param>
-        public Crop(string name, int timeToMaturity, int yieldRate, float buyPrice, float sellPrice)
+        public Crop(string name, int timeToMaturity, int yieldRate, double buyPrice, double sellPrice)
         {
             this.name = name;
             this.timeToMaturity = timeToMaturity;
@@ -33,7 +33,7 @@ namespace StardewCropCalculatorLibrary
         }
 
         // If something costs $1 and sells for $3, its "multiple of money" is 3.  I.e., your money triples.
-        public float InvestmentMultiple(int day, int maxDays)
+        public double InvestmentMultiple(int day, int maxDays)
         {
             return Return(day, maxDays) + 1;
         }
@@ -46,7 +46,7 @@ namespace StardewCropCalculatorLibrary
         /// <param name="day">day crop is planted</param>
         /// <param name="maxDays">days in the season</param>
         /// <returns></returns>
-        public float Return(int day, int maxDays)
+        public double Return(int day, int maxDays)
         {
             return ((NumHarvests(day, maxDays) * sellPrice) - buyPrice) / buyPrice;
         }

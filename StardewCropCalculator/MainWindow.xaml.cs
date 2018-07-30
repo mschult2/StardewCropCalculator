@@ -26,17 +26,22 @@ namespace StardewCropCalculator
     public partial class MainWindow : Window
     {
         List<Week> calendar = new List<Week>();
+        string profitSummary;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // Create display calendar
             calendar.Add(new Week());
             calendar.Add(new Week());
             calendar.Add(new Week());
             calendar.Add(new Week());
 
             dgCalendar.ItemsSource = calendar;
+
+            // Create display profit summary
+            tbProfitSummary.Text = "";
         }
 
         public class Week
@@ -63,6 +68,55 @@ namespace StardewCropCalculator
             expenseReport?.LineItems.Add(new LineItem());
         }
 
+        private void DeleteCrop_Click(object sender, RoutedEventArgs e)
+        {
+            //Border border = FindVisualParent<Border>(sender as Button);
+            //int rowIndex = Grid.GetRow(border);
+            //var rowProp = border.GetValue(Grid.RowProperty);
+            //Debug.WriteLine(rowProp);
+
+            //var app = Application.Current;
+            //var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
+            //expenseReport?.LineItems.RemoveAt(0);
+
+            //Grid grid = FindVisualParent<Grid>(sender as Button);
+            //grid.RowDefinitions.RemoveAt(2);
+
+            //expensesItemsControl.ItemsSource;
+
+
+            //Button senderButton = (Button)sender;
+            //LineItem lineItem = null;
+
+            //FrameworkElement currentObject = senderButton;
+            //while (1 == 1)
+            //{
+            //    currentObject = currentObject.Parent as FrameworkElement;
+            //    if (currentObject.GetType() == typeof(System.Windows.Controls.Primitives.Popup))
+            //    {
+            //        lineItem = (currentObject as System.Windows.Controls.Primitives.Popup).PlacementTarget as LineItem;
+            //        break;
+            //    }
+            //}
+            ////Remove from ObservableCollection<JobView>:
+            //JobViews.Remove(lineItem);
+        }
+
+        static T FindVisualParent<T>(UIElement element) where T : UIElement
+        {
+            UIElement parent = element;
+            while (parent != null)
+            {
+                T correctlyTyped = parent as T;
+                if (correctlyTyped != null)
+                {
+                    return correctlyTyped;
+                }
+                parent = VisualTreeHelper.GetParent(parent) as UIElement;
+            }
+            return null;
+        }
+
         private void computeButton_Click(object sender, RoutedEventArgs e)
         {
             // Populate crop list.
@@ -79,10 +133,10 @@ namespace StardewCropCalculator
 
             // Calculate optimal schedule.
             int numDays = 28;
-            PlantScheduleFactory scheduleFactory = new PlantScheduleFactory(28);
+            PlantScheduleFactory scheduleFactory = new PlantScheduleFactory(numDays);
 
             PlantSchedule bestSchedule;
-            float maxWealthMultiple = scheduleFactory.GetBestSchedule(crops, out bestSchedule);
+            var maxWealthMultiple = scheduleFactory.GetBestSchedule(crops, out bestSchedule);
 
             bool[] plantingDays = scheduleFactory.GetPlantingDays();
 
@@ -148,26 +202,16 @@ namespace StardewCropCalculator
                     default:
                         throw new Exception("Math is wrong in the day case statement!");
                 }
+
+                if (day == numDays && day % 7 != 0)
+                    calendar.Add(week);
             }
 
+            // Populate display profit summary.
+            profitSummary = "Following this schedule will increase your money by:  " + maxWealthMultiple.ToString("0.00") + "x";
+
             dgCalendar.ItemsSource = calendar;
-
-            //MessageBox.Show(
-            //    "Highest-profit planting schedule: " + maxWealthMultiple + "x gold increase\n\n" + scheduleStr,
-            //    "Most Profitable Planting Schedule",
-            //    MessageBoxButton.OK,
-            //    MessageBoxImage.Information);
-
-            //DialogResult = true;
-        }
-
-        private void cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-        }
-
-        private void dgCalendar_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
+            tbProfitSummary.Text = profitSummary;
 
         }
     }

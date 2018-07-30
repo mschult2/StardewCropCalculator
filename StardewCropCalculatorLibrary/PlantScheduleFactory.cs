@@ -21,7 +21,7 @@ namespace StardewCropCalculatorLibrary
 
             /// The maximum CUMULATIVE investment multiple that can be obtained from planting this crop on a particular day. (E.g., 3x means tripling you money.)
             /// Accounts for reinvestment of interest.
-            public float[] cumMultiple;
+            public double[] cumMultiple;
         }
         #endregion
 
@@ -36,8 +36,8 @@ namespace StardewCropCalculatorLibrary
             // Initialize memo table
             memo.schedule = new PlantSchedule(numDays);
 
-            memo.cumMultiple = new float[numDays + 1]; // array goes from day 0 (unused) to day numDays for ease of access
-            memo.cumMultiple = memo.cumMultiple.Select(x => 1F).ToArray(); // If you don't plant, your money multiplies by 1x (no change)
+            memo.cumMultiple = new double[numDays + 1]; // array goes from day 0 (unused) to day numDays for ease of access
+            memo.cumMultiple = memo.cumMultiple.Select(x => 1.0).ToArray(); // If you don't plant, your money multiplies by 1x (no change)
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace StardewCropCalculatorLibrary
         /// <param name="schedule">Outputs the best schedule</param>
         /// <param name="day">The day to start planting on</param>
         /// <returns></returns>
-        public float GetBestSchedule(List<Crop> crops, out PlantSchedule schedule)
+        public double GetBestSchedule(List<Crop> crops, out PlantSchedule schedule)
         {
             // Find the best crop for each day, starting from end of season.
             for (int day = numDays; day > 0; --day)
@@ -56,18 +56,21 @@ namespace StardewCropCalculatorLibrary
                 foreach (var crop in crops)
                 {
                     int numHarvests = crop.NumHarvests(day, numDays);
-                    float cropMultiple = crop.InvestmentMultiple(day, numDays); // sell price divided by cost
+                    var cropMultiple = crop.InvestmentMultiple(day, numDays); // sell price divided by cost
 
                     // Base case: no harvest
                     if (crop.NumHarvests(day, numDays) < 1)
                         continue;
 
                     // Calculate the cumulative investment multiple of the planting.
-                    float cumInvestmentMultiple = 0;
+                    double cumInvestmentMultiple = 0;
                     var harvestDay = day + crop.timeToMaturity;
-                    for (var harvest = 1; harvest <= numHarvests; ++harvest)
+                    for (int harvest = 1; harvest <= numHarvests; ++harvest)
                     {
-                        cumInvestmentMultiple += (cropMultiple/numHarvests) * memo.cumMultiple[harvestDay];
+                        var nextPlantDay = harvestDay + 1; // Money comes in the day after a harvest
+                        var nextPlantDayCumMultiple = nextPlantDay > numDays ? 1 : memo.cumMultiple[nextPlantDay];
+
+                        cumInvestmentMultiple += (cropMultiple/numHarvests) * nextPlantDayCumMultiple;
 
                         harvestDay += crop.yieldRate;
                     }
@@ -78,6 +81,9 @@ namespace StardewCropCalculatorLibrary
                         memo.cumMultiple[day] = cumInvestmentMultiple;
                         memo.schedule.SetCrop(day, crop);
                     }
+
+                    if (Double.IsPositiveInfinity(cumInvestmentMultiple))
+                        throw new Exception("Cumulative investment multiple is too large of a number!");
                 }
             }
 
@@ -107,9 +113,10 @@ namespace StardewCropCalculatorLibrary
 
                 Crop crop = memo.schedule.GetCrop(day);
 
-                for (int harvestDay = day + crop.timeToMaturity; harvestDay <= numDays; harvestDay = harvestDay + crop.yieldRate)
+                for (int harvestDay = day + crop.timeToMaturity; harvestDay <= numDays - 1 /* For subsequent plant day */; harvestDay = harvestDay + crop.yieldRate)
                 {
-                    plantingDays[harvestDay] = true;
+                    var profitDay = harvestDay + 1;
+                    plantingDays[profitDay] = true;
                 }
 
                 ++day;
