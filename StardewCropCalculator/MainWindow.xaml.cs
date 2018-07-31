@@ -66,40 +66,52 @@ namespace StardewCropCalculator
             var app = Application.Current;
             var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
             expenseReport?.LineItems.Add(new LineItem());
+
+            expensesItemsControl.ApplyTemplate();
+            //var itemsGrid = expensesItemsControl.ItemTemplate.FindName("grid_userControls", expensesItemsControl);
+
+            // Getting the currently selected ListBoxItem
+            // Note that the ListBox must have
+            // IsSynchronizedWithCurrentItem set to True for this to work
+            var item = expensesItemsControl.ItemContainerGenerator.ContainerFromItem(expensesItemsControl.Items.CurrentItem); // returns a UIElement
+
+            // Getting the ContentPresenter of myListBoxItem
+            ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(item);
+
+            // Finding textBlock from the DataTemplate that is set on that ContentPresenter
+            //DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
+            //Grid cropGrid = (Grid)myDataTemplate.FindName("grid_userControls", myContentPresenter);
+
+            //// Do something to the DataTemplate-generated TextBlock
+            //MessageBox.Show("The text of the TextBlock of the selected list item: "
+            //    + cropGrid.Name);
         }
 
         private void DeleteCrop_Click(object sender, RoutedEventArgs e)
         {
-            //Border border = FindVisualParent<Border>(sender as Button);
-            //int rowIndex = Grid.GetRow(border);
-            //var rowProp = border.GetValue(Grid.RowProperty);
-            //Debug.WriteLine(rowProp);
+            //var myControl = sender as Button;
+            //int rowindex = (int)myControl.GetValue(Grid.RowProperty);
 
-            //var app = Application.Current;
-            //var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
-            //expenseReport?.LineItems.RemoveAt(0);
+            //Debug.WriteLine("DeleteCrop_Click: rowindex = " + rowindex);
 
-            //Grid grid = FindVisualParent<Grid>(sender as Button);
-            //grid.RowDefinitions.RemoveAt(2);
+            var item = expensesItemsControl.ItemContainerGenerator.ContainerFromItem(expensesItemsControl.Items.CurrentItem);
+        }
 
-            //expensesItemsControl.ItemsSource;
-
-
-            //Button senderButton = (Button)sender;
-            //LineItem lineItem = null;
-
-            //FrameworkElement currentObject = senderButton;
-            //while (1 == 1)
-            //{
-            //    currentObject = currentObject.Parent as FrameworkElement;
-            //    if (currentObject.GetType() == typeof(System.Windows.Controls.Primitives.Popup))
-            //    {
-            //        lineItem = (currentObject as System.Windows.Controls.Primitives.Popup).PlacementTarget as LineItem;
-            //        break;
-            //    }
-            //}
-            ////Remove from ObservableCollection<JobView>:
-            //JobViews.Remove(lineItem);
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                    return (childItem)child;
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
         }
 
         static T FindVisualParent<T>(UIElement element) where T : UIElement
@@ -212,6 +224,24 @@ namespace StardewCropCalculator
 
             dgCalendar.ItemsSource = calendar;
             tbProfitSummary.Text = profitSummary;
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var app = Application.Current;
+            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
+
+            for (int i = 0; i < expenseReport.LineItems.Count; ++i)
+            {
+                if (expenseReport.LineItems[i].Name.ToLower() == expenseReport.CropToDelete.ToLower())
+                    expenseReport.LineItems.RemoveAt(i);
+            }
+
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
         }
     }

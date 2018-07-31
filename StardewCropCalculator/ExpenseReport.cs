@@ -18,6 +18,7 @@ namespace StardewCropCalculator
         private string _costCenter;
         private string _employeeNumber;
         private int _totalExpenses;
+        private string _cropToDelete = "blueberry";
 
         public ExpenseReport()
         {
@@ -52,6 +53,16 @@ namespace StardewCropCalculator
             {
                 _employeeNumber = value;
                 OnPropertyChanged("EmployeeNumber");
+            }
+        }
+
+        public string CropToDelete
+        {
+            get { return _cropToDelete; }
+            set
+            {
+                _cropToDelete = value;
+                OnPropertyChanged("CropToDelete");
             }
         }
 

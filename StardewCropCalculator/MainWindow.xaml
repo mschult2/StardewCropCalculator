@@ -79,9 +79,8 @@
         </Style>
 
         <DataTemplate x:Key="ExpenseTemplate">
-            <Grid>
+            <Grid Name="grid_userControls">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="9*" />
                     <ColumnDefinition Width="33*" />
                     <ColumnDefinition Width="33*" />
                     <ColumnDefinition Width="33*" />
@@ -89,18 +88,17 @@
                     <ColumnDefinition Width="33*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="X"  Click="DeleteCrop_Click" Grid.Column="0" />
-                <TextBox Text="{Binding Path=Name}" Grid.Column="1" />
-                <TextBox Text="{Binding Path=TimeToMature}" Grid.Column="2" TextAlignment="Right" />
-                <TextBox Text="{Binding Path=TimeBetweenHarvests}" Grid.Column="3" TextAlignment="Right" />
-                <TextBox Text="{Binding Path=Cost}" Grid.Column="4" TextAlignment="Right" />
-                <TextBox Grid.Column="4" TextAlignment="Right" >
+                <TextBox Text="{Binding Path=Name}" Grid.Column="0" />
+                <TextBox Text="{Binding Path=TimeToMature}" Grid.Column="1" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=TimeBetweenHarvests}" Grid.Column="2" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=Cost}" Grid.Column="3" TextAlignment="Right" />
+                <TextBox Grid.Column="3" TextAlignment="Right" >
                     <TextBox.Text>
                         <Binding Path="Cost" UpdateSourceTrigger="PropertyChanged">
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <TextBox Text="{Binding Path=Sell}" Grid.Column="5" TextAlignment="Right" />
+                <TextBox Text="{Binding Path=Sell}" Grid.Column="4" TextAlignment="Right" />
             </Grid>
         </DataTemplate>
 
@@ -116,7 +114,7 @@
         <Image Style="{StaticResource WatermarkImage}" Grid.RowSpan="2" />
 
         <!-- Add Expense Button -->
-        <Button Style="{StaticResource FunctionButton}" Click="addCropButton_Click" Margin="126,612,959,46" RenderTransformOrigin="0.112,1.035" Grid.Row="1">
+        <Button Style="{StaticResource FunctionButton}" Click="addCropButton_Click" Margin="54,612,1151,46" RenderTransformOrigin="0.112,1.035" Grid.Row="1">
             Add _Crop
             <Button.ToolTip>
                 <TextBlock>Create a new row to add an additional crop</TextBlock>
@@ -160,19 +158,19 @@
                 </TextBlock>
 
             <!-- Time to Mature Column Header -->
-            <TextBlock Style="{StaticResource TableLabel}" Height="60" Margin="10,-17,0,9" Width="127" FontSize="16" TextAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2">
+            <TextBlock Style="{StaticResource TableLabel}" Height="60" Margin="3,-17,0,9" Width="127" FontSize="16" TextAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2">
                 <TextBlock.ToolTip>
                     <TextBlock><Run Text="Time to Mature"/></TextBlock>
                 </TextBlock.ToolTip><Run Text="Days"/><LineBreak/><Run Text="to"/><LineBreak/><Run Text="Mature"/></TextBlock>
 
             <!-- Time Between Harvests -->
-            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1" Height="66" Margin="88,-18,0,4" Width="157" FontSize="16" TextAlignment="Center" RenderTransformOrigin="0.512,-0.008" Grid.ColumnSpan="2">
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="1" Height="66" Margin="81,-17,0,3" Width="158" FontSize="16" TextAlignment="Center" RenderTransformOrigin="0.512,-0.008" Grid.ColumnSpan="2">
                 <TextBlock.ToolTip>
                     <TextBlock><Run Text="Time Between Harvests"/></TextBlock>
                 </TextBlock.ToolTip><Run Text="Days"/><LineBreak/><Run Text="Between"/><LineBreak/><Run Text="Harvests"/></TextBlock>
 
             <!-- Cost -->
-            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="2" Height="18" Margin="112,25,0,9" Width="37" FontSize="16">
+            <TextBlock Style="{StaticResource TableLabel}" Grid.Column="2" Height="18" Margin="102,26,0,8" Width="38" FontSize="16">
                     Cost
                 <TextBlock.ToolTip>
                     <TextBlock>Cost</TextBlock>
@@ -180,7 +178,7 @@
                 </TextBlock>
 
             <!-- Sell -->
-            <TextBlock Style="{StaticResource TableLabelRightAligned}" Grid.Column="2" Height="18" Margin="0,24,21,10" Width="40" FontSize="16">
+            <TextBlock Style="{StaticResource TableLabelRightAligned}" Grid.Column="2" Height="18" Margin="0,25,25,9" Width="40" FontSize="16">
                    Sell
                 <TextBlock.ToolTip>
                     <TextBlock>Sell</TextBlock>
@@ -192,12 +190,15 @@
         <ItemsControl Name="expensesItemsControl"
                           Style="{StaticResource ExpenseScroller}"
                           ItemTemplate="{StaticResource ExpenseTemplate}"
-                          ItemsSource="{Binding Path=LineItems}" Margin="10,97,843,330" FontSize="14" Grid.Row="1" />
+                          ItemsSource="{Binding Path=LineItems}" Margin="32,97,843,330" FontSize="14" Grid.Row="1"/>
 
         <DataGrid Name="dgCalendar" Margin="510,21,38,128" Grid.Row="1" ColumnWidth="*" RowHeight="131" ScrollViewer.CanContentScroll="False" CanUserAddRows="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
         </DataGrid>
 
         <TextBlock Name="tbProfitSummary" Text="" Margin="600,46,138,676" TextAlignment="Center" Grid.RowSpan="2" />
+
+        <TextBox Text="{Binding Path=CropToDelete}" HorizontalAlignment="Left" Height="34" Margin="333,612,0,46" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="125" TextAlignment="Center" TextChanged="TextBox_TextChanged"/>
+        <Button Content="Delete Crop:" HorizontalAlignment="Left" Margin="206,612,0,0" Grid.Row="1" VerticalAlignment="Top" Width="122" Click="Button_Click" Height="34"/>
 
     </Grid>
 
