@@ -197,8 +197,18 @@
 
         <TextBlock Name="tbProfitSummary" Text="" Margin="600,46,138,676" TextAlignment="Center" Grid.RowSpan="2" />
 
-        <TextBox Text="{Binding Path=CropToDelete}" HorizontalAlignment="Left" Height="34" Margin="333,612,0,46" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="125" TextAlignment="Center" TextChanged="TextBox_TextChanged"/>
-        <Button Content="Delete Crop:" HorizontalAlignment="Left" Margin="206,612,0,0" Grid.Row="1" VerticalAlignment="Top" Width="122" Click="Button_Click" Height="34"/>
+        <TextBox Text="{Binding Path=CropToDelete}" HorizontalAlignment="Left" Height="34" Margin="331,591,0,67" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="125" TextAlignment="Center" />
+        <Button Content="Delete Crop:" HorizontalAlignment="Left" Margin="204,591,0,0" Grid.Row="1" VerticalAlignment="Top" Width="122" Click="DeleteCrop_Click" Height="34"/>
+        <Button Content="Delete All" HorizontalAlignment="Left" Margin="204,637,0,0" Grid.Row="1" VerticalAlignment="Top" Width="122" Click="DeleteCrops_Click" Height="34"/>
+
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_Instructions" Click="Instructions_Click" />
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
 
     </Grid>
 

@@ -62,7 +62,12 @@ namespace StardewCropCalculatorLibrary
             if (dayPlanted < 1 || maxDays < 1 || dayPlanted > maxDays)
                 throw new Exception("dayPlanted and maxDays must be greater than 0, and dayPlanted must be less than or equal to maxDays.");
 
-            int numHarvests = (int)((maxDays - dayPlanted - timeToMaturity + yieldRate) / yieldRate); // rounds to floor
+            int numHarvests = 0;
+
+            if (yieldRate == -1)
+                numHarvests = (maxDays - dayPlanted - timeToMaturity >= 0) ? 1 : 0;
+           else
+                numHarvests = (int)((maxDays - dayPlanted - timeToMaturity + yieldRate) / yieldRate); // rounds to floor
 
             return numHarvests < 0 ? 0 : numHarvests;
         }

@@ -1,22 +1,17 @@
 ﻿// EditBox and EditBoxAdorner taken from this example WPF example:
 // https://github.com/Microsoft/WPF-Samples/tree/master/Sample%20Applications/ExpenseIt
 
+using StardewCropCalculatorLibrary;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
-using StardewCropCalculatorLibrary;
 
 namespace StardewCropCalculator
 {
@@ -66,67 +61,32 @@ namespace StardewCropCalculator
             var app = Application.Current;
             var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
             expenseReport?.LineItems.Add(new LineItem());
-
-            expensesItemsControl.ApplyTemplate();
-            //var itemsGrid = expensesItemsControl.ItemTemplate.FindName("grid_userControls", expensesItemsControl);
-
-            // Getting the currently selected ListBoxItem
-            // Note that the ListBox must have
-            // IsSynchronizedWithCurrentItem set to True for this to work
-            var item = expensesItemsControl.ItemContainerGenerator.ContainerFromItem(expensesItemsControl.Items.CurrentItem); // returns a UIElement
-
-            // Getting the ContentPresenter of myListBoxItem
-            ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(item);
-
-            // Finding textBlock from the DataTemplate that is set on that ContentPresenter
-            //DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
-            //Grid cropGrid = (Grid)myDataTemplate.FindName("grid_userControls", myContentPresenter);
-
-            //// Do something to the DataTemplate-generated TextBlock
-            //MessageBox.Show("The text of the TextBlock of the selected list item: "
-            //    + cropGrid.Name);
         }
 
         private void DeleteCrop_Click(object sender, RoutedEventArgs e)
         {
-            //var myControl = sender as Button;
-            //int rowindex = (int)myControl.GetValue(Grid.RowProperty);
+            var app = Application.Current;
+            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
 
-            //Debug.WriteLine("DeleteCrop_Click: rowindex = " + rowindex);
+            for (int i = 0; i < expenseReport.LineItems.Count; ++i)
+            {
+                if (expenseReport.LineItems[i].Name.ToLower() == expenseReport.CropToDelete.ToLower())
+                    expenseReport.LineItems.RemoveAt(i);
+            }
 
-            var item = expensesItemsControl.ItemContainerGenerator.ContainerFromItem(expensesItemsControl.Items.CurrentItem);
         }
 
-        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        private void DeleteCrops_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is childItem)
-                    return (childItem)child;
-                else
-                {
-                    childItem childOfChild = FindVisualChild<childItem>(child);
-                    if (childOfChild != null)
-                        return childOfChild;
-                }
-            }
-            return null;
+            var app = Application.Current;
+            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
+
+            expenseReport?.LineItems.Clear();
         }
 
-        static T FindVisualParent<T>(UIElement element) where T : UIElement
+        private void Instructions_Click(object sender, RoutedEventArgs e)
         {
-            UIElement parent = element;
-            while (parent != null)
-            {
-                T correctlyTyped = parent as T;
-                if (correctlyTyped != null)
-                {
-                    return correctlyTyped;
-                }
-                parent = VisualTreeHelper.GetParent(parent) as UIElement;
-            }
-            return null;
+
         }
 
         private void computeButton_Click(object sender, RoutedEventArgs e)
@@ -227,22 +187,36 @@ namespace StardewCropCalculator
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
         {
-            var app = Application.Current;
-            var expenseReport = (ExpenseReport)app.FindResource("ExpenseData");
-
-            for (int i = 0; i < expenseReport.LineItems.Count; ++i)
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
-                if (expenseReport.LineItems[i].Name.ToLower() == expenseReport.CropToDelete.ToLower())
-                    expenseReport.LineItems.RemoveAt(i);
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                    return (childItem)child;
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
             }
-
+            return null;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
-
+            UIElement parent = element;
+            while (parent != null)
+            {
+                T correctlyTyped = parent as T;
+                if (correctlyTyped != null)
+                {
+                    return correctlyTyped;
+                }
+                parent = VisualTreeHelper.GetParent(parent) as UIElement;
+            }
+            return null;
         }
     }
 
