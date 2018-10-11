@@ -1,6 +1,6 @@
 # Summary
 
-This program computes the most profitable crop to plant on any given day, in the game Stardew Valley.
+This Windows desktop application computes the most profitable crop to plant on any given day, in the game Stardew Valley.
 It also tells you how much you profit you will make (if you follow the given scheule). E.g., an "investment multiple" of 45x means if you started the season with 1000 g, then you will end with 45,000 g.
 
 # Instructions
