@@ -1,3 +1,7 @@
+# Install
+
+Download Setup.msi from the [Release page](https://github.com/mschult2/StardewCropCalculator/releases), then double-click.
+
 # Summary
 
 This Windows desktop application computes the most profitable crop to plant on any given day, in the game Stardew Valley.
