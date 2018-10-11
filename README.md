@@ -1,6 +1,6 @@
 # Install
 
-Download Setup.msi from the [Release page](https://github.com/mschult2/StardewCropCalculator/releases), then double-click.
+Download Setup.msi from the [Release page](https://github.com/mschult2/StardewCropCalculator/releases), then double-click this file to begin installation.
 
 # Summary
 
