@@ -5,7 +5,7 @@ Download Setup.msi from the [Release page](https://github.com/mschult2/StardewCr
 # Summary
 
 This Windows desktop application computes the most profitable crop to plant on any given day, in the game Stardew Valley.
-It also tells you how much profit you will make (if you follow the given scheule). E.g., an "investment multiple" of 45x means if you started the season with 1000 g, then you will end with 45,000 g.
+It also tells you how much profit you will make (if you follow the given schedule). E.g., an "investment multiple" of 45x means if you started the season with 1000 g, then you will end with 45,000 g.
 
 # Instructions
 
