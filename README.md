@@ -17,7 +17,7 @@ It also tells you how much profit you will make (if you follow the given schedul
 
 # Caveats
 
-This program currently only takes into account crops. It does not account for:
+This program only takes into account crops. It does not account for:
 * Crafting
 * Energy meter
 * Time expended tending to crops
