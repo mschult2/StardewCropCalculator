@@ -21,11 +21,7 @@ This program currently only takes into account crops. It does not account for:
 * Crafting
 * Energy meter
 * Time expended tending to crops
-* Available tiles
-* Random variances in harvest output, like giant or multiple (although the user can account for this by putting an average price in the *Sell* column)
-* Animals 
-* Other sources of income (like mining and foraging)
+* Giant crops
 
-For this reason, **wheat** should not be included in the crop list. While technically the most profitable crop during summer, it is so cheap and would consume so much time, space, and energy that it is not a viable option (at least not for this algorithm). If you don't have enough money or days left in the season, though, buying a little wheat (or another cheap-and-fast crop) may be a good option.
 
-This is a good guide for beginner players.  But more advanced players will probably want to account for other resources in their strategy, like crafting.  However, even the most advanced players can use this calendar as an objective measure of comparative crop profitability over a given time period.
+This is a good guide for beginner and intermediate players. More advanced players may want to account for other resources in their strategy, like crafting.  However, even the most advanced players can use this calendar as an objective measure of comparative crop profitability over a given time period.
